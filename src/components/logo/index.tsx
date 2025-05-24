@@ -1,6 +1,11 @@
-const Logo = () => {
+// Utils
+import { cn } from "@/lib/utils";
+
+type Props = { className?: string };
+
+const Logo = ({ className }: Props) => {
 	return (
-		<div className="flex items-center">
+		<div className={cn("flex items-center", className)}>
 			<img
 				src="/assets/images/quickNote_logo.png"
 				alt="QuickNote Logo"
