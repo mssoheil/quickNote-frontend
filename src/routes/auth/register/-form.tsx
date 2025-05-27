@@ -8,23 +8,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
 
-const FormSchema = z.object({
-	email: z
-		.string()
-		.min(1, "Email should not be empty")
-		.email("Invalid email address"),
-	password: z.string().min(8, "Password should be at least 8 character"),
-});
+const FormSchema = z
+	.object({
+		email: z
+			.string()
+			.min(1, "Email should not be empty")
+			.email("Invalid email address"),
+		password: z.string().min(8, "Password should be at least 8 character"),
+		confirmPassword: z
+			.string()
+			.min(8, "Confirm password should be at least 8 character"),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Password and confirm password do not match",
+		path: ["confirmPassword"],
+	});
 
 type FormValues = z.infer<typeof FormSchema>;
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(FormSchema),
 		mode: "onSubmit",
 		defaultValues: {
 			email: "",
 			password: "",
+			confirmPassword: "",
 		},
 	});
 
@@ -46,8 +55,14 @@ export const LoginForm = () => {
 					type="password"
 					placeholder="Enter Password"
 				/>
+				<InputFormField<typeof form.control>
+					type="password"
+					name="confirmPassword"
+					label="Confirm password"
+					placeholder="Enter password again"
+				/>
 
-				<SubmitButton>Log in</SubmitButton>
+				<SubmitButton>Sign up</SubmitButton>
 			</form>
 		</Form>
 	);
