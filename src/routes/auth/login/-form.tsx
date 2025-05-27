@@ -3,7 +3,7 @@ import { Form } from "@/components/ui/form";
 // Shared components
 import { SubmitButton, InputFormField } from "@/components";
 // Utils
-import { z } from "zod";
+import { z, type ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
@@ -16,11 +16,14 @@ const FormSchema = z.object({
 	password: z.string().min(8, "Password should be at least 8 character"),
 });
 
-type FormValues = z.infer<typeof FormSchema>;
+type FormValues = {
+	email: string;
+	password: string;
+};
 
 export const LoginForm = () => {
 	const form = useForm<FormValues>({
-		resolver: zodResolver(FormSchema),
+		resolver: zodResolver(FormSchema as ZodType<FormValues>),
 		mode: "onSubmit",
 		defaultValues: {
 			email: "",

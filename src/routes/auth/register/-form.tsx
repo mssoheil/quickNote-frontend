@@ -3,7 +3,7 @@ import { Form } from "@/components/ui/form";
 // Shared components
 import { SubmitButton, InputFormField } from "@/components";
 // Utils
-import { z } from "zod";
+import { z, type ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
@@ -24,11 +24,15 @@ const FormSchema = z
 		path: ["confirmPassword"],
 	});
 
-type FormValues = z.infer<typeof FormSchema>;
+type FormValues = {
+	email: string;
+	password: string;
+	confirmPassword: string;
+};
 
 export const RegisterForm = () => {
 	const form = useForm<FormValues>({
-		resolver: zodResolver(FormSchema),
+		resolver: zodResolver(FormSchema as ZodType<FormValues>),
 		mode: "onSubmit",
 		defaultValues: {
 			email: "",
