@@ -3,11 +3,17 @@ import axios from "axios";
 // Configs
 import { envLoader } from "@/config/env-loader.config";
 // Types
-import type { AxiosError, AxiosInstance } from "axios";
+import type {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 interface HttpConfig {
   suffix?: string;
 }
+
+const AUTH_PATHS = ["/auth/login", "/auth/register"];
 
 export abstract class HttpService {
   protected httpService: AxiosInstance;
@@ -28,6 +34,22 @@ export abstract class HttpService {
     });
 
     this.responseInterceptor();
+    this.requestInterceptor();
+  }
+
+  private requestInterceptor() {
+    this.httpService.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        const url = new URL(config.url ?? "", config.baseURL);
+        const path = url.pathname;
+
+        const isAuth = AUTH_PATHS.some((p) => path.startsWith(p));
+        config.withCredentials = !isAuth;
+
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
   }
 
   private responseInterceptor() {
