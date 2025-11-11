@@ -1,12 +1,14 @@
 import { HttpService } from "@/services/http";
+// Types
+import type { RegisterUserRequestDto } from "@/features/auth/types";
 
 class AuthHttpService extends HttpService {
   constructor() {
     super({ suffix: "auth" });
   }
 
-  register() {
-    return this.httpService.post("register");
+  register(payload: RegisterUserRequestDto) {
+    return this.httpService.post("register", payload);
   }
 }
 

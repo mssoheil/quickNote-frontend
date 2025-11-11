@@ -1,3 +1,7 @@
+import type { ReactNode } from "react";
+// Configs
+import { envLoader } from "@/config/env-loader.config";
+// Utils
 import {
   QueryClient,
   QueryClientProvider,
@@ -20,8 +24,24 @@ const queryOptions: QueryClientConfig = {
 
 const queryClient = new QueryClient(queryOptions);
 
-export const QueryProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const Devtools =
+  envLoader.ENV === "development"
+    ? await import("@tanstack/react-query-devtools").then(
+        (m) => m.ReactQueryDevtools
+      )
+    : null;
+
+interface Props {
+  children: ReactNode;
+}
+
+export const QueryProvider = ({ children }: Props) => {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {envLoader.ENV === "development" && Devtools ? (
+        <Devtools initialIsOpen={false} />
+      ) : null}
+    </QueryClientProvider>
   );
 };
