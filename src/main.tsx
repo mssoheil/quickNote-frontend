@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import "./index.css";
+import { Toast } from "@/components/ui/toast";
 // Providers
 import { QueryProvider } from "@/providers/query.provider";
 
@@ -21,6 +22,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryProvider>
         <RouterProvider router={router} />
+        <Toast />
       </QueryProvider>
     </StrictMode>
   );
