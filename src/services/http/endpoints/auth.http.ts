@@ -8,7 +8,7 @@ class AuthHttpService extends HttpService {
   }
 
   register(payload: RegisterUserRequestDto) {
-    return this.httpService.post("register", payload);
+    return this.httpService.post("/register", payload);
   }
 }
 

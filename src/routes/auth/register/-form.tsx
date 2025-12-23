@@ -45,7 +45,6 @@ export const RegisterForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    console.log("🚀 ~ onSubmit ~ values:", values);
     registerMutation.mutate({
       email: values.email,
       password: values.password,

@@ -1,5 +1,6 @@
 // Utilities
 import axios from "axios";
+import { toastMessage } from "@/components/ui/toast";
 // Configs
 import { envLoader } from "@/config/env-loader.config";
 // Types
@@ -13,7 +14,7 @@ interface HttpConfig {
   suffix?: string;
 }
 
-const AUTH_PATHS = ["/auth/login", "/auth/register"];
+const AUTH_PATHS = ["/api/auth/login", "/api/auth/register"];
 
 export abstract class HttpService {
   protected httpService: AxiosInstance;
@@ -59,6 +60,13 @@ export abstract class HttpService {
         if (error?.response?.status === 401) {
           window.location.href = "/auth";
         }
+
+        const errorMessage = error?.response?.data?.message;
+
+        if (errorMessage) {
+          toastMessage.error(errorMessage);
+        }
+
         return Promise.reject(error);
       }
     );
