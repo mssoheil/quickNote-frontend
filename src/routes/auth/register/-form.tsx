@@ -7,7 +7,7 @@ import { z, type ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
-import { useRegister } from "@/features/auth/hooks";
+import { useRegisterMutation } from "@/features/auth/hooks";
 
 const FormSchema = z
   .object({
@@ -20,7 +20,7 @@ const FormSchema = z
       .string()
       .min(8, "Confirm password should be at least 8 character"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data: FormValues) => data.password === data.confirmPassword, {
     message: "Password and confirm password do not match",
     path: ["confirmPassword"],
   });
@@ -32,7 +32,7 @@ type FormValues = {
 };
 
 export const RegisterForm = () => {
-  const {} = useRegister();
+  const registerMutation = useRegisterMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema as ZodType<FormValues>),
@@ -45,7 +45,11 @@ export const RegisterForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    console.log(values);
+    console.log("🚀 ~ onSubmit ~ values:", values);
+    registerMutation.mutate({
+      email: values.email,
+      password: values.password,
+    });
   }
 
   return (

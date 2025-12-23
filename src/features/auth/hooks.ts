@@ -2,9 +2,9 @@ import type { RegisterUserRequestDto } from "@/features/auth/types";
 import AuthService from "@/services/http/endpoints/auth.http";
 import { useMutation } from "@tanstack/react-query";
 
-export const useRegister = () => {
+export const useRegisterMutation = () => {
   return useMutation({
-    mutationFn: (payload: RegisterUserRequestDto) =>
-      AuthService.register(payload),
+    mutationFn: async (payload: RegisterUserRequestDto) =>
+      await AuthService.register(payload),
   });
 };
