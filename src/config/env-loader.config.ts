@@ -1,13 +1,8 @@
-import { get } from "env-var";
-import { config } from "dotenv";
-// Types
 import type { EnvLoader } from "@/types/env-loader.type";
 
-config();
-
-const BASE_URL = get("BASE_URL").required().asString();
-const ENV = get("ENV").required().asString();
-const TIMEOUT_MS = get("TIMEOUT_MS").required().asInt();
+const BASE_URL = import.meta.env.VITE_BASE_URL as string;
+const ENV = import.meta.env.VITE_ENV as string;
+const TIMEOUT_MS = Number(import.meta.env.VITE_TIMEOUT_MS ?? 0);
 
 export const envLoader: EnvLoader = {
   ENV,
