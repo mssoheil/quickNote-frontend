@@ -7,7 +7,9 @@ import { toastMessage } from "@/components/ui/toast";
 // Types
 import type { RegisterUserRequestDto } from "@/features/auth/types";
 
-export const useRegisterMutation = () => {
+export const useRegisterMutation = (
+  options: MutationQueryOptions<RegisterUserRequestDto>
+) => {
   return useMutation({
     mutationFn: async (payload: RegisterUserRequestDto) =>
       await AuthService.register(payload),
@@ -16,6 +18,7 @@ export const useRegisterMutation = () => {
 
       if (responseMessage) {
         toastMessage.success(responseMessage);
+        options.onSuccess(response);
       }
     },
   });

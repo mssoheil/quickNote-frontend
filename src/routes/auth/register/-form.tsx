@@ -7,7 +7,8 @@ import { z, type ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
-import { useRegisterMutation } from "@/features/auth/hooks";
+import { useNavigate } from "@tanstack/react-router";
+import { useRegisterMutation } from "@/features/auth/register.hook";
 
 const FormSchema = z
   .object({
@@ -32,7 +33,13 @@ type FormValues = {
 };
 
 export const RegisterForm = () => {
-  const registerMutation = useRegisterMutation();
+  const navigate = useNavigate();
+
+  const registerMutation = useRegisterMutation({
+    onSuccess: async () => {
+      await navigate({ to: "/dashboard" });
+    },
+  });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema as ZodType<FormValues>),

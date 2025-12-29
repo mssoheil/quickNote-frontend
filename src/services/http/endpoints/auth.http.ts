@@ -1,6 +1,9 @@
 import { HttpService } from "@/services/http";
 // Types
-import type { RegisterUserRequestDto } from "@/features/auth/types";
+import type {
+  GetMeResponseDto,
+  RegisterUserRequestDto,
+} from "@/features/auth/types";
 
 class AuthHttpService extends HttpService {
   constructor() {
@@ -9,6 +12,10 @@ class AuthHttpService extends HttpService {
 
   register(payload: RegisterUserRequestDto) {
     return this.httpService.post("/register", payload);
+  }
+
+  getMe(): Promise<GetMeResponseDto> {
+    return this.httpService.get("/me");
   }
 }
 

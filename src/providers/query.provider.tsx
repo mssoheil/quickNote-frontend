@@ -22,7 +22,7 @@ const queryOptions: QueryClientConfig = {
   },
 };
 
-const queryClient = new QueryClient(queryOptions);
+export const queryClient = new QueryClient(queryOptions);
 
 const Devtools =
   envLoader.ENV === "development"
