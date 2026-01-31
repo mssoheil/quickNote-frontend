@@ -7,51 +7,65 @@ import { z, type ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Hooks
 import { useForm } from "react-hook-form";
+import { useNavigate } from "@tanstack/react-router";
+import { useLoginMutation } from "@/features/auth/login.hook";
 
 const FormSchema = z.object({
-	email: z
-		.string()
-		.min(1, "Email should not be empty")
-		.email("Invalid email address"),
-	password: z.string().min(8, "Password should be at least 8 character"),
+  email: z
+    .string()
+    .min(1, "Email should not be empty")
+    .email("Invalid email address"),
+  password: z.string().min(8, "Password should be at least 8 character"),
 });
 
 type FormValues = {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 };
 
 export const LoginForm = () => {
-	const form = useForm<FormValues>({
-		resolver: zodResolver(FormSchema as ZodType<FormValues>),
-		mode: "onSubmit",
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
+  const navigate = useNavigate();
 
-	function onSubmit(values: z.infer<typeof FormSchema>) {
-		console.log(values);
-	}
+  const loginMutation = useLoginMutation({
+    onSuccess: async () => {
+      await navigate({ to: "/dashboard" });
+    },
+  });
 
-	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-				<InputFormField<typeof form.control>
-					name="email"
-					label="Email"
-					placeholder="Enter Email"
-				/>
-				<InputFormField<typeof form.control>
-					name="password"
-					label="Password"
-					type="password"
-					placeholder="Enter Password"
-				/>
+  const form = useForm<FormValues>({
+    resolver: zodResolver(FormSchema as ZodType<FormValues>),
+    mode: "onSubmit",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-				<SubmitButton>Log in</SubmitButton>
-			</form>
-		</Form>
-	);
+  function onSubmit(values: z.infer<typeof FormSchema>) {
+    console.log(values);
+    loginMutation.mutate({
+      email: values.email,
+      password: values.password,
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <InputFormField<typeof form.control>
+          name="email"
+          label="Email"
+          placeholder="Enter Email"
+        />
+        <InputFormField<typeof form.control>
+          name="password"
+          label="Password"
+          type="password"
+          placeholder="Enter Password"
+        />
+
+        <SubmitButton>Log in</SubmitButton>
+      </form>
+    </Form>
+  );
 };
