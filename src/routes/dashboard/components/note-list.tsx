@@ -14,6 +14,7 @@ import { AddNoteForm } from "@/routes/dashboard/components/add-note-form";
 // Hooks
 import { useNavigate } from "@tanstack/react-router";
 import { useGetNotesQuery } from "@/features/note/get-notes.query";
+import { useUpdateNoteQuery } from "@/features/note/update-note.query";
 
 export function NoteList() {
   const [page, setPage] = useState(1);
@@ -33,6 +34,12 @@ export function NoteList() {
     limit: pageSize,
   });
 
+  const updateNoteMutation = useUpdateNoteQuery({
+    onSuccess: () => {
+      onSuccessUpdate();
+    },
+  });
+
   if (isLoading) return <Loading />;
   if (isError) return <Error />;
 
@@ -42,6 +49,11 @@ export function NoteList() {
   function onViewNote(note: TNote) {
     setCurrentNote(note);
     setIsOpen(true);
+  }
+
+  function onSuccessUpdate() {
+    setCurrentNote(null);
+    setIsOpen(false);
   }
 
   function handleOpenRemoveModal(note: TNote) {
@@ -66,16 +78,19 @@ export function NoteList() {
     setIsRemoveModalOpened(false);
   }
 
+  function handleUpdate(note: TNote) {
+    console.log("🚀 ~ handleUpdate ~ note:", note);
+    console.log("🚀 ~ handleUpdate ~ currentNote:", currentNote);
+    updateNoteMutation.mutate({ id: currentNote.id, ...note });
+  }
+
   if (isOpen && currentNote) {
     return (
       <EditNoteForm
         initial={currentNote}
         isSaving={false}
         onCancel={() => setIsOpen(false)}
-        onSave={() => {
-          setIsOpen(false);
-          refetch();
-        }}
+        onSave={handleUpdate}
       />
     );
   }

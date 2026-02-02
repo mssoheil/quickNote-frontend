@@ -25,8 +25,11 @@ class NoteHttpService extends HttpService {
     return this.httpService.post("", payload);
   }
 
-  updateNote(param: ParamRequestDto, payload: UpdateNoteRequestDto) {
-    return this.httpService.put(`/${param.id}`, payload);
+  updateNote(payload: UpdateNoteRequestDto & ParamRequestDto) {
+    return this.httpService.put(`/${payload.id}`, {
+      title: payload.title,
+      content: payload.content,
+    });
   }
 
   removeNote(param: ParamRequestDto) {

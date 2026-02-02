@@ -53,9 +53,7 @@ export function EditNote({
   return (
     <div
       className={cn(
-        // ✅ Mobile: full page
         "fixed inset-0 z-50 flex flex-col bg-white",
-        // ✅ Desktop: centered sheet (my decision)
         "sm:inset-auto sm:relative sm:mx-auto sm:my-8 sm:h-[calc(100vh-4rem)] sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-2xl sm:border sm:shadow-sm",
         className,
       )}
@@ -83,7 +81,6 @@ export function EditNote({
           </div>
         </div>
 
-        {/* Content */}
         <div className="min-h-0 flex-1 px-4 py-3 sm:px-6">
           <textarea
             value={content}
@@ -107,8 +104,6 @@ export function EditNote({
         </div>
       </div>
 
-      {/* Bottom actions (optional, but you asked buttons at bottom originally)
-          On mobile, keep them reachable; on desktop, feels fine as footer. */}
       <div className="border-t bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
         <div className="flex items-center justify-end gap-2">
           <button
