@@ -15,7 +15,6 @@ export const Logout = ({ onCancel, onOk }: Props) => {
   });
 
   function onSubmit() {
-    console.log("fun");
     logoutMutation.mutate();
   }
 
