@@ -1,21 +1,31 @@
-import { useMutation } from "@tanstack/react-query";
-// Constants
+import {
+  useMutation,
+  useQueryClient,
+  type UseMutationOptions,
+} from "@tanstack/react-query";
 import { NOTE_QUERY_KEY } from "@/features/note/query-key";
-// Services
 import NoteService from "@/services/http/endpoints/note.http";
-// Types
 import type { CreateNoteRequestDto } from "@/features/note/types";
 
-export const useCreateNoteQuery = () =>
-  useMutation({
-    queryFn: async (payload: CreateNoteRequestDto) => {
+export const useCreateNoteMutation = (
+  options?: UseMutationOptions<unknown, Error, CreateNoteRequestDto>,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload) => {
       const response = await NoteService.createNote(payload);
       return response;
     },
-    onSuccess: (...args) => {
-      queryClient.invalidateQueries({
-        queryKey: [NOTE_QUERY_KEY],
-      });
-      options?.onSuccess?.(...args);
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY] });
+      options?.onSuccess?.(data, variables, context);
+    },
+    onError: (error, variables, context) => {
+      options?.onError?.(error, variables, context);
+    },
+    onSettled: (data, error, variables, context) => {
+      options?.onSettled?.(data, error, variables, context);
     },
   });
+};

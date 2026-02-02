@@ -22,6 +22,7 @@ class NoteHttpService extends HttpService {
   }
 
   createNote(payload: CreateNoteRequestDto) {
+    console.log("🚀 ~ NoteHttpService ~ createNote ~ payload:", payload);
     return this.httpService.post("", payload);
   }
 
@@ -30,7 +31,8 @@ class NoteHttpService extends HttpService {
   }
 
   removeNote(param: ParamRequestDto) {
-    return this.httpService.delete(`/${param.id}`, payload);
+    console.log("🚀 ~ NoteHttpService ~ removeNote ~ param:", param);
+    return this.httpService.delete(`/${param.id}`);
   }
 }
 
