@@ -42,7 +42,6 @@ export const LoginForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    console.log(values);
     loginMutation.mutate({
       email: values.email,
       password: values.password,

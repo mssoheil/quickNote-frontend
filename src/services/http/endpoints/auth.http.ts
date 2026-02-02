@@ -22,6 +22,10 @@ class AuthHttpService extends HttpService {
   getMe(): Promise<GetMeResponseDto> {
     return this.httpService.get("/me");
   }
+
+  logout(): Promise {
+    return this.httpService.post("/logout");
+  }
 }
 
 const AuthService = new AuthHttpService();
